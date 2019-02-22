@@ -1,11 +1,37 @@
 import pandas as pd
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
+from google.cloud import storage
+import os.path
 
-df_artworks = pd.read_csv('/home/ignacio/Devel/art-retrieval-api/app/main/service/train_mayors_style_encoded.csv')
-artwork_code_matrix = np.load('/home/ignacio/Devel/art-retrieval-api/app/main/service/train_mayors_style_encode.npy')
+BASE_DIR = os.path.dirname(__file__)
+JSON_CREDENTIALS = os.path.join( BASE_DIR, 'artwork-retrieval.json' )
+METADATA_FILE_NAME = os.path.join( BASE_DIR, 'train_mayors_style_encoded.csv' )
+MATRIX_FILE_NAME = os.path.join( BASE_DIR, 'train_mayors_style_encode.npy' )
+
+
+def get_file_from_cloud_storage(filename):
+    
+    client = storage.Client.from_service_account_json(JSON_CREDENTIALS)
+    # https://console.cloud.google.com/storage/browser/[bucket-id]/
+    bucket = client.get_bucket('artwork-retrieval-data')
+    # Then do other things...
+    # # get bucket data as blob
+    blob = bucket.get_blob(os.path.basename(filename))
+    blob.download_to_filename(filename)
+
 
 def get_sim_arworks(image_id):
+
+    #check if data is available
+    if not( os.path.isfile( METADATA_FILE_NAME ) ):
+        get_file_from_cloud_storage( METADATA_FILE_NAME )
+    if not( os.path.isfile( MATRIX_FILE_NAME ) ):
+        get_file_from_cloud_storage( MATRIX_FILE_NAME )
+
+    df_artworks = pd.read_csv( METADATA_FILE_NAME )
+    artwork_code_matrix = np.load( MATRIX_FILE_NAME )
+
     #get similarity matrix for image_id
     sim_matrix = cosine_similarity(artwork_code_matrix[int(image_id)].reshape((1,-1)), artwork_code_matrix)
     
