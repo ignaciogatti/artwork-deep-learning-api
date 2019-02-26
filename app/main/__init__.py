@@ -9,7 +9,7 @@ main = Blueprint('api', __name__)
 api = Api(main,
           title='ARTWORK RETRIEVAL API WITH FLASK RESTPLUS AND JWT',
           version='1.0',
-          description='An artwrok retrieval for flask restplus web service'
+          description='An artwrok retrieval api developed with flask restplus'
           )
 
 api.add_namespace(artwork_ns, path='/artwork')
