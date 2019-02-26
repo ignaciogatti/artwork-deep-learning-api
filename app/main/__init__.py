@@ -2,6 +2,7 @@ from flask_restplus import Api
 from flask import Blueprint
 
 from .controller.artwork_retrieval_controller import api as artwork_ns
+from .controller.artwork_encode_controller import api as encode_ns
 
 main = Blueprint('api', __name__)
 
@@ -12,6 +13,4 @@ api = Api(main,
           )
 
 api.add_namespace(artwork_ns, path='/artwork')
-
-#from . import view
-#from .controller.artwork_retrieval_controller import ArtworkSimList
+api.add_namespace(encode_ns, path='/artwork')
