@@ -8,6 +8,9 @@ It was developed using:
 - Flaskplus
 - Keras
 
+Actually it is running on:
+- https://artwork-retrieval-api.herokuapp.com/ (until under development)
+
 ## Artwork retrieval
 
 ![artwork-retrieval-motivation](https://github.com/ignaciogatti/art-deep-learning/blob/master/images/Artwork-retrieval.jpg)
